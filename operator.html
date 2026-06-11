@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Operator Mode | Innocent Mwea</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+        * { scrollbar-width: thin; scrollbar-color: #1a1f2e #0a0a0f; }
+        *::-webkit-scrollbar { width: 6px; }
+        *::-webkit-scrollbar-track { background: #0a0a0f; }
+        *::-webkit-scrollbar-thumb { background: #1a1f2e; border-radius: 3px; }
+        body { background: #0a0a0f; font-family: 'JetBrains Mono', monospace; overflow: hidden; margin: 0; user-select: none; }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; letter-spacing: 0.08em; }
+        .window {
+            position: absolute; background: rgba(13,17,23,0.95); border: 1px solid rgba(16,185,129,0.25);
+            border-radius: 10px; backdrop-filter: blur(14px); box-shadow: 0 0 30px rgba(0,0,0,0.5), 0 0 0 1px rgba(16,185,129,0.08);
+            min-width: 300px; min-height: 200px; display: flex; flex-direction: column; transition: box-shadow 0.2s;
+        }
+        .window.focused { box-shadow: 0 0 40px rgba(16,185,129,0.12), 0 0 0 2px rgba(16,185,129,0.2); }
+        .window-header {
+            background: rgba(16,185,129,0.05); border-bottom: 1px solid rgba(16,185,129,0.12);
+            padding: 8px 14px; display: flex; align-items: center; justify-content: space-between; cursor: grab;
+        }
+        .window-header:active { cursor: grabbing; }
+        .win-ctrl { width: 11px; height: 11px; border-radius: 50%; border: none; cursor: pointer; transition: filter 0.2s; }
+        .win-ctrl:hover { filter: brightness(1.5); }
+        .window-body { flex: 1; overflow: auto; padding: 16px; color: #c9d1d9; font-size: 13px; line-height: 1.6; }
+        .terminal-cursor::after { content: '▊'; animation: blink 1s infinite; color: #10b981; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .desktop-icon { transition: all 0.2s; cursor: pointer; text-align: center; }
+        .desktop-icon:hover { transform: scale(1.08); filter: brightness(1.3); }
+        .taskbar { position: fixed; bottom: 0; left: 0; right: 0; height: 36px; background: rgba(13,17,23,0.95); border-top: 1px solid rgba(16,185,129,0.1); display: flex; align-items: center; padding: 0 10px; gap: 6px; z-index: 999; }
+        .taskbar-btn { padding: 4px 12px; border-radius: 4px; font-size: 11px; color: #9ca3af; background: rgba(16,185,129,0.04); border: 1px solid transparent; cursor: pointer; transition: all 0.2s; white-space: nowrap; max-width: 160px; overflow: hidden; text-overflow: ellipsis; }
+        .taskbar-btn:hover { background: rgba(16,185,129,0.1); color: #10b981; border-color: rgba(16,185,129,0.2); }
+        .resize-handle { position: absolute; bottom: 0; right: 0; width: 16px; height: 16px; cursor: nwse-resize; background: linear-gradient(135deg, transparent 50%, rgba(16,185,129,0.4) 50%); border-radius: 0 0 10px 0; }
+    </style>
+</head>
+<body>
+    <div id="desktop" class="relative w-screen h-screen">
+        <!-- Desktop Icons -->
+        <div class="absolute top-6 left-6 flex flex-col gap-3 z-10">
+            <div class="desktop-icon flex flex-col items-center gap-1" onclick="openWindow('terminal')">
+                <div class="p-2.5 bg-gray-800/60 rounded-xl border border-brand-500/20 text-brand-400"><i class="fa-solid fa-terminal text-lg"></i></div>
+                <span class="text-[10px] text-gray-400 font-orbitron">Terminal</span>
+            </div>
+            <div class="desktop-icon flex flex-col items-center gap-1" onclick="openWindow('network-map')">
+                <div class="p-2.5 bg-gray-800/60 rounded-xl border border-brand-500/20 text-brand-400"><i class="fa-solid fa-diagram-project text-lg"></i></div>
+                <span class="text-[10px] text-gray-400 font-orbitron">Network</span>
+            </div>
+            <div class="desktop-icon flex flex-col items-center gap-1" onclick="openWindow('hospital')">
+                <div class="p-2.5 bg-gray-800/60 rounded-xl border border-brand-500/20 text-brand-400"><i class="fa-solid fa-hospital text-lg"></i></div>
+                <span class="text-[10px] text-gray-400 font-orbitron">Hospital</span>
+            </div>
+            <div class="desktop-icon flex flex-col items-center gap-1" onclick="openWindow('lasalle')">
+                <div class="p-2.5 bg-gray-800/60 rounded-xl border border-brand-500/20 text-brand-400"><i class="fa-solid fa-school text-lg"></i></div>
+                <span class="text-[10px] text-gray-400 font-orbitron">La Salle</span>
+            </div>
+            <div class="desktop-icon flex flex-col items-center gap-1" onclick="openWindow('cuea')">
+                <div class="p-2.5 bg-gray-800/60 rounded-xl border border-brand-500/20 text-brand-400"><i class="fa-solid fa-network-wired text-lg"></i></div>
+                <span class="text-[10px] text-gray-400 font-orbitron">CUEA</span>
+            </div>
+            <div class="desktop-icon flex flex-col items-center gap-1" onclick="openWindow('resort')">
+                <div class="p-2.5 bg-gray-800/60 rounded-xl border border-brand-500/20 text-brand-400"><i class="fa-solid fa-utensils text-lg"></i></div>
+                <span class="text-[10px] text-gray-400 font-orbitron">Resort</span>
+            </div>
+            <div class="desktop-icon flex flex-col items-center gap-1" onclick="openWindow('selftaught')">
+                <div class="p-2.5 bg-gray-800/60 rounded-xl border border-brand-500/20 text-brand-400"><i class="fa-solid fa-brain text-lg"></i></div>
+                <span class="text-[10px] text-gray-400 font-orbitron">Self-Taught</span>
+            </div>
+            <div class="desktop-icon flex flex-col items-center gap-1" onclick="window.open('index.html','_self')">
+                <div class="p-2.5 bg-gray-800/60 rounded-xl border border-purple-500/20 text-purple-400"><i class="fa-solid fa-house text-lg"></i></div>
+                <span class="text-[10px] text-gray-400 font-orbitron">Portfolio</span>
+            </div>
+        </div>
+
+        <div id="windows-container"></div>
+        <div class="taskbar" id="taskbar"></div>
+    </div>
+
+    <script>
+        let zIndex = 100;
+        const openWindows = {};
+        const minimizedWindows = {};
+
+        function createWindow(id, title, iconHTML, contentHTML, x, y, w, h) {
+            if (openWindows[id]) { focusWindow(id); return; }
+            if (minimizedWindows[id]) { restoreWindow(id); return; }
+
+            const win = document.createElement('div');
+            win.className = 'window focused';
+            win.id = `win-${id}`;
+            win.setAttribute('data-id', id);
+            win.style.left = (x || 100 + Object.keys(openWindows).length * 30) + 'px';
+            win.style.top = (y || 80 + Object.keys(openWindows).length * 30) + 'px';
+            win.style.width = (w || 500) + 'px';
+            win.style.height = (h || 380) + 'px';
+            win.style.zIndex = ++zIndex;
+            win.innerHTML = `
+                <div class="window-header" data-window-id="${id}">
+                    <span class="text-brand-400 text-xs font-orbitron tracking-wider">${iconHTML} ${title}</span>
+                    <div class="flex items-center gap-1.5">
+                        <button class="win-ctrl bg-yellow-500" data-action="minimize" title="Minimize"></button>
+                        <button class="win-ctrl bg-red-500" data-action="close" title="Close"></button>
+                    </div>
+                </div>
+                <div class="window-body">${contentHTML}</div>
+                <div class="resize-handle"></div>
+            `;
+            document.getElementById('windows-container').appendChild(win);
+            openWindows[id] = win;
+            makeDraggable(win);
+            makeResizable(win);
+            addTaskbarButton(id, title, iconHTML);
+            win.addEventListener('mousedown', () => focusWindow(id));
+
+            // Window control buttons
+            win.querySelector('[data-action="minimize"]').addEventListener('click', (e) => {
+                e.stopPropagation();
+                minimizeWindow(id);
+            });
+            win.querySelector('[data-action="close"]').addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeWindow(id);
+            });
+        }
+
+        function focusWindow(id) {
+            const win = openWindows[id];
+            if (!win) return;
+            zIndex++;
+            win.style.zIndex = zIndex;
+            document.querySelectorAll('.window').forEach(w => w.classList.remove('focused'));
+            win.classList.add('focused');
+        }
+
+        function closeWindow(id) {
+            const win = openWindows[id];
+            if (!win) return;
+            win.remove();
+            delete openWindows[id];
+            delete minimizedWindows[id];
+            updateTaskbar();
+        }
+
+        function minimizeWindow(id) {
+            const win = openWindows[id];
+            if (!win) return;
+            win.style.display = 'none';
+            minimizedWindows[id] = win;
+            delete openWindows[id];
+            updateTaskbar();
+        }
+
+        function restoreWindow(id) {
+            const win = minimizedWindows[id];
+            if (!win) return;
+            win.style.display = '';
+            openWindows[id] = win;
+            delete minimizedWindows[id];
+            focusWindow(id);
+            updateTaskbar();
+        }
+
+        function addTaskbarButton(id, title, iconHTML) {
+            const btn = document.createElement('button');
+            btn.className = 'taskbar-btn';
+            btn.setAttribute('data-task-id', id);
+            btn.innerHTML = `${iconHTML} ${title}`;
+            btn.addEventListener('click', () => {
+                if (openWindows[id]) focusWindow(id);
+                else if (minimizedWindows[id]) restoreWindow(id);
+            });
+            document.getElementById('taskbar').appendChild(btn);
+        }
+
+        function updateTaskbar() {
+            const taskbar = document.getElementById('taskbar');
+            const existingBtns = taskbar.querySelectorAll('[data-task-id]');
+            const activeIds = new Set([...Object.keys(openWindows), ...Object.keys(minimizedWindows)]);
+            existingBtns.forEach(b => {
+                const bid = b.getAttribute('data-task-id');
+                if (!activeIds.has(bid)) b.remove();
+                else {
+                    if (openWindows[bid]) b.style.color = '#10b981';
+                    else b.style.color = '#9ca3af';
+                }
+            });
+        }
+
+        function makeDraggable(win) {
+            const header = win.querySelector('.window-header');
+            let offsetX, offsetY, isDragging = false;
+            header.addEventListener('mousedown', (e) => {
+                if (e.target.closest('button')) return;
+                isDragging = true;
+                offsetX = e.clientX - win.offsetLeft;
+                offsetY = e.clientY - win.offsetTop;
+                win.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                win.style.left = Math.max(0, Math.min(window.innerWidth - win.offsetWidth, e.clientX - offsetX)) + 'px';
+                win.style.top = Math.max(0, Math.min(window.innerHeight - 60, e.clientY - offsetY)) + 'px';
+            });
+            document.addEventListener('mouseup', () => { isDragging = false; win.style.cursor = ''; });
+        }
+
+        function makeResizable(win) {
+            const handle = win.querySelector('.resize-handle');
+            let startX, startY, startW, startH;
+            handle.addEventListener('mousedown', (e) => {
+                startX = e.clientX; startY = e.clientY;
+                startW = win.offsetWidth; startH = win.offsetHeight;
+                e.stopPropagation();
+                document.addEventListener('mousemove', resize);
+                document.addEventListener('mouseup', stopResize);
+            });
+            function resize(e) {
+                win.style.width = Math.max(300, startW + e.clientX - startX) + 'px';
+                win.style.height = Math.max(200, startH + e.clientY - startY) + 'px';
+            }
+            function stopResize() {
+                document.removeEventListener('mousemove', resize);
+                document.removeEventListener('mouseup', stopResize);
+            }
+        }
+
+        // ─── Open windows ────────────────────────
+        function openWindow(type) {
+            const contentMap = {
+                'terminal': `
+                    <div id="term-${Date.now()}" class="h-full flex flex-col" style="background:#0a0a0f;">
+                        <div class="text-brand-400 text-xs mb-2 font-orbitron">Terminal — jaydaplug@operator-desk</div>
+                        <div id="term-output-${Date.now()}" class="flex-1 overflow-y-auto mb-2 space-y-0.5 text-xs"></div>
+                        <div class="flex items-center text-brand-400"><span>$</span><input id="term-input-${Date.now()}" class="flex-1 bg-transparent outline-none text-gray-300 ml-2 text-xs" autofocus spellcheck="false"></div>
+                    </div>`,
+                'hospital': `<h2 class="text-lg font-bold text-brand-400 mb-3 font-orbitron"><i class="fa-solid fa-hospital mr-2"></i>Nairobi West Hospital</h2><div class="space-y-2 text-xs"><p><strong class="text-brand-400">Backend:</strong> Node.js microservices, PostgreSQL, Redis queues for real‑time room status.</p><p><strong class="text-brand-400">Dashboard:</strong> React + Tailwind, WebSocket updates, D3.js cleaning throughput charts.</p><p><strong class="text-brand-400">Network:</strong> IoT sensors on VLAN‑isolated network, QoS for cleaning alerts.</p><p><strong class="text-brand-400">Impact:</strong> 18% time reduction, 120 staff‑hours/week saved.</p></div>`,
+                'lasalle': `<h2 class="text-lg font-bold text-brand-400 mb-3 font-orbitron"><i class="fa-solid fa-school mr-2"></i>La Salle Academy</h2><div class="space-y-2 text-xs"><p><strong class="text-brand-400">CCTV:</strong> 24 Hikvision IP cameras, NVR, PoE switches, motion detection.</p><p><strong class="text-brand-400">Network:</strong> Cat6a structured cabling, patch panels, VLAN segmentation.</p><p><strong class="text-brand-400">WiFi:</strong> 8 Ubiquiti UniFi APs, seamless roaming, captive portal.</p><p><strong class="text-brand-400">Testing:</strong> Site survey, signal mapping, throughput validation.</p></div>`,
+                'cuea': `<h2 class="text-lg font-bold text-brand-400 mb-3 font-orbitron"><i class="fa-solid fa-network-wired mr-2"></i>CUEA Networking</h2><div class="space-y-2 text-xs"><p><strong class="text-brand-400">Design:</strong> OSPF routing, redundant fiber backbone, scalable IP scheme.</p><p><strong class="text-brand-400">Labs:</strong> Cisco switches & routers, ACLs, NAT, firewall rules.</p><p><strong class="text-brand-400">Security:</strong> pfSense with IDS/IPS, captive portal, WireGuard VPN.</p><p><strong class="text-brand-400">Training:</strong> Workshops on subnetting, troubleshooting, network fundamentals.</p></div>`,
+                'resort': `<h2 class="text-lg font-bold text-brand-400 mb-3 font-orbitron"><i class="fa-solid fa-utensils mr-2"></i>Ankara Resort Experience</h2><div class="space-y-2 text-xs"><p><strong class="text-brand-400">Operations:</strong> Centralized booking, inventory, staff scheduling.</p><p><strong class="text-brand-400">Kitchen:</strong> AI‑driven kitchen display, recipe management, real‑time order tracking.</p><p><strong class="text-brand-400">IoT:</strong> Smart thermostats, energy monitoring, predictive maintenance.</p><p><strong class="text-brand-400">Impact:</strong> 25% kitchen efficiency improvement, 15% guest satisfaction increase.</p></div>`,
+                'selftaught': `<h2 class="text-lg font-bold text-brand-400 mb-3 font-orbitron"><i class="fa-solid fa-brain mr-2"></i>Self‑Taught Journey</h2><div class="space-y-2 text-xs"><p><strong class="text-brand-400">Philosophy:</strong> First‑principles learning, building real projects from scratch.</p><p><strong class="text-brand-400">Home Lab:</strong> Virtualized routers, self‑hosted cloud, RTX 4090 AI server.</p><p><strong class="text-brand-400">Currently:</strong> Kubernetes, Terraform, network automation.</p><p><strong class="text-brand-400">Key Insight:</strong> Understanding systems end‑to‑end creates better engineers.</p></div>`,
+                'network-map': `
+                    <h2 class="text-lg font-bold text-brand-400 mb-3 font-orbitron"><i class="fa-solid fa-diagram-project mr-2"></i>Ankara Clubhouse Topology</h2>
+                    <svg viewBox="0 0 800 350" class="w-full">
+                        <defs><pattern id="g" width="30" height="30" patternUnits="userSpaceOnUse"><path d="M30 0L0 0 0 30" fill="none" stroke="rgba(16,185,129,0.04)"/></pattern></defs>
+                        <rect width="800" height="350" fill="url(#g)"/>
+                        <line x1="400" y1="80" x2="400" y2="150" stroke="rgba(16,185,129,0.2)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        <line x1="400" y1="150" x2="280" y2="230" stroke="rgba(16,185,129,0.2)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        <line x1="400" y1="150" x2="520" y2="230" stroke="rgba(16,185,129,0.2)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        <line x1="280" y1="230" x2="200" y2="300" stroke="rgba(16,185,129,0.15)" stroke-width="1" stroke-dasharray="3,2"/>
+                        <line x1="520" y1="230" x2="600" y2="300" stroke="rgba(16,185,129,0.15)" stroke-width="1" stroke-dasharray="3,2"/>
+                        <circle cx="400" cy="80" r="14" fill="rgba(10,10,15,0.9)" stroke="#ff3366" stroke-width="2"/><text x="400" y="105" text-anchor="middle" fill="#c9d1d9" font-size="9">CORE</text>
+                        <circle cx="400" cy="150" r="14" fill="rgba(10,10,15,0.9)" stroke="#ffaa00" stroke-width="2"/><text x="400" y="175" text-anchor="middle" fill="#c9d1d9" font-size="9">FW</text>
+                        <circle cx="280" cy="230" r="12" fill="rgba(10,10,15,0.9)" stroke="#00d4ff" stroke-width="2"/><text x="280" y="252" text-anchor="middle" fill="#c9d1d9" font-size="9">SW1</text>
+                        <circle cx="520" cy="230" r="12" fill="rgba(10,10,15,0.9)" stroke="#00d4ff" stroke-width="2"/><text x="520" y="252" text-anchor="middle" fill="#c9d1d9" font-size="9">SW2</text>
+                        <circle cx="200" cy="300" r="10" fill="rgba(10,10,15,0.9)" stroke="#10b981" stroke-width="2"/><text x="200" y="320" text-anchor="middle" fill="#c9d1d9" font-size="8">WEB</text>
+                        <circle cx="600" cy="300" r="10" fill="rgba(10,10,15,0.9)" stroke="#10b981" stroke-width="2"/><text x="600" y="320" text-anchor="middle" fill="#c9d1d9" font-size="8">DB</text>
+                    </svg>
+                    <p class="text-xs text-gray-500 mt-3">Click nodes for details · Drag to explore · Fully interactive</p>`
+            };
+
+            if (type === 'terminal') {
+                createWindow(type, 'Terminal', '<i class="fa-solid fa-terminal text-xs"></i>', contentMap[type], 80, 60, 580, 400);
+                initTerminal(type);
+            } else {
+                const sizes = {
+                    'network-map': [700, 420],
+                    'hospital': [480, 360],
+                    'lasalle': [460, 340],
+                    'cuea': [460, 340],
+                    'resort': [480, 360],
+                    'selftaught': [440, 320],
+                };
+                const [w, h] = sizes[type] || [450, 340];
+                createWindow(type, type.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
+                    `<i class="fa-solid fa-folder-open text-xs"></i>`, contentMap[type] || '', 150 + Math.random() * 150, 100 + Math.random() * 100, w, h);
+            }
+        }
+
+        function initTerminal(id) {
+            const winEl = openWindows[id];
+            if (!winEl) return;
+            const outputDiv = winEl.querySelector(`[id^="term-output-"]`);
+            const inputEl = winEl.querySelector(`[id^="term-input-"]`);
+            if (!outputDiv || !inputEl) return;
+
+            function write(text, isCmd) {
+                const p = document.createElement('div');
+                p.textContent = text;
+                p.className = isCmd ? 'text-brand-400 font-semibold' : 'text-gray-400';
+                outputDiv.appendChild(p);
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+            }
+
+            inputEl.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    const cmd = this.value.trim().toLowerCase();
+                    write(`$ ${cmd}`, true);
+                    processCmd(cmd);
+                    this.value = '';
+                }
+            });
+
+            function processCmd(cmd) {
+                switch (cmd) {
+                    case 'help': write('Commands: help, whoami, projects, about, skills, contact, network, hospital, lasalle, cuea, resort, selftaught, clear, exit'); break;
+                    case 'whoami': write('Innocent Mwea (Jaydaplug) — Full‑Stack Dev · Network Engineer · AI Builder · Ankara, Turkey'); break;
+                    case 'about': write('I build systems connecting software, infrastructure, and intelligent automation.'); break;
+                    case 'projects': write('Ankara Resort, Nairobi Hospital, La Salle Academy, CUEA, Self‑Taught AI'); break;
+                    case 'skills': write('Frontend: React/Next.js · Backend: Node.js/Python · Infra: Cisco/pfSense/Docker · AI: LLMs/RAG'); break;
+                    case 'contact': write('Email: innocent@operator-desk.dev · GitHub: jaydaplug · Location: Ankara, Turkey'); break;
+                    case 'network': openWindow('network-map'); write('Opened Network Map.'); break;
+                    case 'hospital': openWindow('hospital'); write('Opened Nairobi West Hospital reference.'); break;
+                    case 'lasalle': openWindow('lasalle'); write('Opened La Salle Academy reference.'); break;
+                    case 'cuea': openWindow('cuea'); write('Opened CUEA reference.'); break;
+                    case 'resort': openWindow('resort'); write('Opened Ankara Resort reference.'); break;
+                    case 'selftaught': openWindow('selftaught'); write('Opened Self‑Taught reference.'); break;
+                    case 'clear': outputDiv.innerHTML = ''; break;
+                    case 'exit': write('Session ended. Close this window or type "clear".'); break;
+                    default: write(`Unknown command: "${cmd}" — Type "help" for options.`);
+                }
+            }
+            inputEl.focus();
+        }
+
+        // Boot: open terminal
+        window.addEventListener('load', () => openWindow('terminal'));
+    </script>
+</body>
+</html>
