@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Innocent Mwea | Full‑Stack Developer & Network Engineer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7', 400: '#34d399', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'Consolas', 'monospace'],
+                        display: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.6s ease-out forwards',
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-right': 'slideRight 0.5s ease-out forwards',
+                        'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeUp: { '0%': { opacity: '0', transform: 'translateY(30px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+                        slideRight: { '0%': { opacity: '0', transform: 'translateX(-20px)' }, '100%': { opacity: '1', transform: 'translateX(0)' } },
+                        pulseSoft: { '0%,100%': { opacity: '1' }, '50%': { opacity: '0.7' } },
+                        float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-20px)' } },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.05); }
+        .glass-card { background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(16, 185, 129, 0.1); transition: all 0.3s ease; }
+        .glass-card:hover { border-color: rgba(16, 185, 129, 0.3); transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(16,185,129,0.1); }
+        .text-gradient { background: linear-gradient(135deg, #34d399, #6ee7b7, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .border-gradient { border-image: linear-gradient(135deg, #10b981, #34d399, #10b981) 1; }
+        .hero-glow { box-shadow: 0 0 120px rgba(16, 185, 129, 0.08); }
+        .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(16,185,129,0.2), transparent); }
+        ::selection { background: rgba(16, 185, 129, 0.3); color: #fff; }
+        .stats-number { font-variant-numeric: tabular-nums; }
+        @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; } }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-200 antialiased overflow-x-hidden">
+
+    <!-- ─── NAVIGATION ────────────────────────── -->
+    <nav class="fixed top-0 w-full z-50 glass transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#hero" class="text-brand-400 font-bold text-lg tracking-tight">
+                <i class="fa-solid fa-terminal mr-2"></i>IM<span class="text-gray-400">.dev</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="#projects" class="text-gray-400 hover:text-brand-400 transition">Projects</a>
+                <a href="#experience" class="text-gray-400 hover:text-brand-400 transition">Experience</a>
+                <a href="#skills" class="text-gray-400 hover:text-brand-400 transition">Skills</a>
+                <a href="#contact" class="text-gray-400 hover:text-brand-400 transition">Contact</a>
+                <a href="operator.html" class="px-4 py-2 bg-brand-500/10 border border-brand-500/30 text-brand-400 rounded-lg hover:bg-brand-500/20 transition text-xs tracking-wider">
+                    <i class="fa-solid fa-terminal mr-1"></i> Operator Mode
+                </a>
+            </div>
+            <button class="md:hidden text-gray-400 text-xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 space-y-3 text-sm">
+            <a href="#projects" class="block text-gray-400 hover:text-brand-400">Projects</a>
+            <a href="#experience" class="block text-gray-400 hover:text-brand-400">Experience</a>
+            <a href="#skills" class="block text-gray-400 hover:text-brand-400">Skills</a>
+            <a href="#contact" class="block text-gray-400 hover:text-brand-400">Contact</a>
+            <a href="operator.html" class="block text-brand-400"><i class="fa-solid fa-terminal mr-1"></i>Operator Mode</a>
+        </div>
+    </nav>
+
+    <!-- ─── HERO ──────────────────────────────── -->
+    <section id="hero" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+        <div class="absolute inset-0 hero-glow"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-500/5 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-emerald-400/5 rounded-full blur-3xl animate-float" style="animation-delay: -3s;"></div>
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+            <div class="animate-fade-in mb-6">
+                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium bg-brand-500/10 border border-brand-500/20 text-brand-400 mb-6">
+                    <i class="fa-solid fa-circle text-[6px] text-brand-400 animate-pulse-soft"></i> Available for projects
+                </span>
+            </div>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-white mb-6 animate-fade-up">
+                Innocent <span class="text-gradient">Mwea</span>
+            </h1>
+            <p class="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto mb-4 animate-fade-up" style="animation-delay: 0.15s;">
+                Full‑Stack Developer · Network Engineer · AI Systems Builder
+            </p>
+            <p class="text-md md:text-lg text-gray-500 max-w-xl mx-auto mb-10 animate-fade-up" style="animation-delay: 0.25s;">
+                I architect systems that bridge software, infrastructure, and intelligent automation — from bare metal to beautiful interfaces.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 animate-fade-up" style="animation-delay: 0.35s;">
+                <a href="#projects" class="px-8 py-3.5 bg-brand-500 text-gray-900 font-semibold rounded-xl hover:bg-brand-400 transition shadow-lg shadow-brand-500/20">
+                    <i class="fa-solid fa-arrow-down mr-2"></i>View Projects
+                </a>
+                <a href="#" class="px-8 py-3.5 border border-gray-600 text-gray-300 rounded-xl hover:border-brand-400 hover:text-brand-400 transition">
+                    <i class="fa-solid fa-file-arrow-down mr-2"></i>Download Resume
+                </a>
+                <a href="operator.html" class="px-8 py-3.5 border border-purple-500/30 text-purple-400 rounded-xl hover:bg-purple-500/10 transition">
+                    <i class="fa-solid fa-terminal mr-2"></i>Operator Mode
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+            <i class="fa-solid fa-chevron-down text-gray-600 text-sm"></i>
+        </div>
+    </section>
+
+    <!-- ─── STATS BAR ─────────────────────────── -->
+    <section class="py-12 border-y border-gray-800/50">
+        <div class="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="animate-fade-up">
+                <div class="text-3xl md:text-4xl font-extrabold text-brand-400 stats-number">15+</div>
+                <div class="text-sm text-gray-500 mt-1">Projects Deployed</div>
+            </div>
+            <div class="animate-fade-up" style="animation-delay: 0.1s;">
+                <div class="text-3xl md:text-4xl font-extrabold text-brand-400 stats-number">5+</div>
+                <div class="text-sm text-gray-500 mt-1">Years Experience</div>
+            </div>
+            <div class="animate-fade-up" style="animation-delay: 0.2s;">
+                <div class="text-3xl md:text-4xl font-extrabold text-brand-400 stats-number">3</div>
+                <div class="text-sm text-gray-500 mt-1">Networks Architected</div>
+            </div>
+            <div class="animate-fade-up" style="animation-delay: 0.3s;">
+                <div class="text-3xl md:text-4xl font-extrabold text-brand-400 stats-number">7+</div>
+                <div class="text-sm text-gray-500 mt-1">AI Models Built</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── PROJECTS ──────────────────────────── -->
+    <section id="projects" class="py-24 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-brand-400 text-sm font-semibold tracking-widest uppercase">Featured Work</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white mt-3 mb-4">Projects That <span class="text-gradient">Deliver Impact</span></h2>
+                <p class="text-gray-500 max-w-xl mx-auto">Real‑world systems I've architected, built, and deployed — from network infrastructure to AI‑powered applications.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1: Ankara Resort -->
+                <div class="glass-card rounded-2xl p-6 group">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-xl flex items-center justify-center mb-5 text-brand-400 text-xl">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Ankara Resort Experience</h3>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">Centralized resort management with AI‑driven kitchen operations, IoT integration, and real‑time guest experience platform.</p>
+                    <div class="flex flex-wrap gap-1.5 mb-5">
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">React</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">Node.js</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">AI/LLM</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">IoT</span>
+                    </div>
+                    <div class="flex items-center text-brand-400 text-sm font-medium">
+                        <span>25% faster kitchen ops</span>
+                        <i class="fa-solid fa-arrow-up-right ml-auto opacity-0 group-hover:opacity-100 transition"></i>
+                    </div>
+                </div>
+                <!-- Card 2: Nairobi Hospital -->
+                <div class="glass-card rounded-2xl p-6 group">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-xl flex items-center justify-center mb-5 text-brand-400 text-xl">
+                        <i class="fa-solid fa-hospital"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Nairobi West Hospital</h3>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">Real‑time housekeeping management with IoT sensors, AI route optimization, and WebSocket‑powered dashboard.</p>
+                    <div class="flex flex-wrap gap-1.5 mb-5">
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">React</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">Node.js</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">PostgreSQL</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">IoT</span>
+                    </div>
+                    <div class="flex items-center text-brand-400 text-sm font-medium">
+                        <span>18% time reduction</span>
+                        <i class="fa-solid fa-arrow-up-right ml-auto opacity-0 group-hover:opacity-100 transition"></i>
+                    </div>
+                </div>
+                <!-- Card 3: La Salle Academy -->
+                <div class="glass-card rounded-2xl p-6 group">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-xl flex items-center justify-center mb-5 text-brand-400 text-xl">
+                        <i class="fa-solid fa-school"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">La Salle Academy</h3>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">CCTV deployment, structured Cat6a cabling, WiFi with Ubiquiti APs, and VLAN‑segmented campus network.</p>
+                    <div class="flex flex-wrap gap-1.5 mb-5">
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">Cisco</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">Ubiquiti</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">Cat6a</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">VLAN</span>
+                    </div>
+                    <div class="flex items-center text-brand-400 text-sm font-medium">
+                        <span>24 cameras, 8 APs</span>
+                        <i class="fa-solid fa-arrow-up-right ml-auto opacity-0 group-hover:opacity-100 transition"></i>
+                    </div>
+                </div>
+                <!-- Card 4: CUEA -->
+                <div class="glass-card rounded-2xl p-6 group">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-xl flex items-center justify-center mb-5 text-brand-400 text-xl">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">CUEA Computer Networking</h3>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">Campus‑wide OSPF routing, pfSense firewall, student lab deployment, and technical training workshops.</p>
+                    <div class="flex flex-wrap gap-1.5 mb-5">
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">Cisco</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">pfSense</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">VPN</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">IDS/IPS</span>
+                    </div>
+                    <div class="flex items-center text-brand-400 text-sm font-medium">
+                        <span>Redundant fiber backbone</span>
+                        <i class="fa-solid fa-arrow-up-right ml-auto opacity-0 group-hover:opacity-100 transition"></i>
+                    </div>
+                </div>
+                <!-- Card 5: Self-Taught AI -->
+                <div class="glass-card rounded-2xl p-6 group">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-xl flex items-center justify-center mb-5 text-brand-400 text-xl">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Self‑Taught AI & Automation</h3>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">Home lab with virtualized routers, self‑hosted cloud, AI inference server, and continuous experimentation.</p>
+                    <div class="flex flex-wrap gap-1.5 mb-5">
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">Python</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">LLMs</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">Docker</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">K8s</span>
+                    </div>
+                    <div class="flex items-center text-brand-400 text-sm font-medium">
+                        <span>RTX 4090 inference</span>
+                        <i class="fa-solid fa-arrow-up-right ml-auto opacity-0 group-hover:opacity-100 transition"></i>
+                    </div>
+                </div>
+                <!-- Card 6: Ankara Clubhouse Network -->
+                <div class="glass-card rounded-2xl p-6 group">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-xl flex items-center justify-center mb-5 text-brand-400 text-xl">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Ankara Clubhouse Network</h3>
+                    <p class="text-gray-400 text-sm mb-4 leading-relaxed">Full network stack deployment with VLAN segmentation, QoS, VPN, and enterprise‑grade wireless coverage.</p>
+                    <div class="flex flex-wrap gap-1.5 mb-5">
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">Cisco ISR</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">pfSense</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">UniFi</span>
+                        <span class="px-2.5 py-1 bg-gray-800 rounded-md text-[11px] text-gray-300">WireGuard</span>
+                    </div>
+                    <div class="flex items-center text-brand-400 text-sm font-medium">
+                        <span>187 days uptime</span>
+                        <i class="fa-solid fa-arrow-up-right ml-auto opacity-0 group-hover:opacity-100 transition"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── EXPERIENCE ────────────────────────── -->
+    <section id="experience" class="py-24 px-6 bg-gray-900/50">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-brand-400 text-sm font-semibold tracking-widest uppercase">Career Path</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white mt-3">Experience <span class="text-gradient">Timeline</span></h2>
+            </div>
+            <div class="space-y-0">
+                <div class="relative pl-8 pb-12 border-l-2 border-gray-800 last:border-transparent last:pb-0 animate-slide-right">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-brand-500 rounded-full ring-4 ring-gray-900"></div>
+                    <span class="text-brand-400 text-xs font-semibold tracking-wider">2024 — Present</span>
+                    <h3 class="text-xl font-bold text-white mt-1">Ankara Resort · Powerhouse Operations & Kitchen Tech</h3>
+                    <p class="text-gray-400 text-sm mt-2 leading-relaxed">Architected centralized resort management system. AI kitchen display, recipe management, real‑time order tracking. IoT integration for smart thermostats and predictive maintenance. 25% kitchen efficiency improvement.</p>
+                </div>
+                <div class="relative pl-8 pb-12 border-l-2 border-gray-800 last:border-transparent last:pb-0 animate-slide-right" style="animation-delay: 0.15s;">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-brand-500 rounded-full ring-4 ring-gray-900"></div>
+                    <span class="text-brand-400 text-xs font-semibold tracking-wider">2023</span>
+                    <h3 class="text-xl font-bold text-white mt-1">Nairobi West Hospital · Housekeeping System</h3>
+                    <p class="text-gray-400 text-sm mt-2 leading-relaxed">Designed and deployed IoT‑enabled housekeeping management. Real‑time dashboard with WebSocket updates. AI route optimization engine reduced cleaning turnaround by 18%, saving 120 staff‑hours/week.</p>
+                </div>
+                <div class="relative pl-8 pb-12 border-l-2 border-gray-800 last:border-transparent last:pb-0 animate-slide-right" style="animation-delay: 0.3s;">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-brand-500 rounded-full ring-4 ring-gray-900"></div>
+                    <span class="text-brand-400 text-xs font-semibold tracking-wider">2022</span>
+                    <h3 class="text-xl font-bold text-white mt-1">La Salle Academy · Network & CCTV Installation</h3>
+                    <p class="text-gray-400 text-sm mt-2 leading-relaxed">Deployed 24 Hikvision IP cameras with NVR and PoE switches. Structured Cat6a cabling with patch panels. Installed 8 Ubiquiti UniFi APs with seamless roaming. VLAN segmentation and staff training.</p>
+                </div>
+                <div class="relative pl-8 pb-12 border-l-2 border-gray-800 last:border-transparent last:pb-0 animate-slide-right" style="animation-delay: 0.45s;">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-brand-500 rounded-full ring-4 ring-gray-900"></div>
+                    <span class="text-brand-400 text-xs font-semibold tracking-wider">2021</span>
+                    <h3 class="text-xl font-bold text-white mt-1">CUEA · Campus Network Design</h3>
+                    <p class="text-gray-400 text-sm mt-2 leading-relaxed">Designed OSPF‑routed campus network with redundant fiber backbone. Deployed pfSense firewall with IDS/IPS and VPN. Configured Cisco switches for student labs. Conducted networking workshops.</p>
+                </div>
+                <div class="relative pl-8 animate-slide-right" style="animation-delay: 0.6s;">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 bg-brand-500 rounded-full ring-4 ring-gray-900"></div>
+                    <span class="text-brand-400 text-xs font-semibold tracking-wider">2020 — Ongoing</span>
+                    <h3 class="text-xl font-bold text-white mt-1">Independent Projects & Continuous Learning</h3>
+                    <p class="text-gray-400 text-sm mt-2 leading-relaxed">Self‑taught full‑stack development, networking, and AI. Built home lab with virtualized routers, self‑hosted cloud, and RTX 4090 AI inference server. Currently mastering Kubernetes and Terraform.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── SKILLS ────────────────────────────── -->
+    <section id="skills" class="py-24 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-brand-400 text-sm font-semibold tracking-widest uppercase">Technical Arsenal</span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-white mt-3">Skills & <span class="text-gradient">Expertise</span></h2>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-brand-400 text-3xl mb-4"><i class="fa-solid fa-code"></i></div>
+                    <h4 class="text-white font-bold mb-3">Frontend</h4>
+                    <ul class="space-y-1.5 text-sm text-gray-400">
+                        <li>HTML5 / CSS3</li><li>JavaScript (ES6+)</li><li>React / Next.js</li><li>Tailwind CSS</li>
+                    </ul>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-brand-400 text-3xl mb-4"><i class="fa-solid fa-database"></i></div>
+                    <h4 class="text-white font-bold mb-3">Backend</h4>
+                    <ul class="space-y-1.5 text-sm text-gray-400">
+                        <li>Node.js / Express</li><li>Python / FastAPI</li><li>PostgreSQL / MongoDB</li><li>Redis / WebSocket</li>
+                    </ul>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-brand-400 text-3xl mb-4"><i class="fa-solid fa-globe"></i></div>
+                    <h4 class="text-white font-bold mb-3">Infrastructure</h4>
+                    <ul class="space-y-1.5 text-sm text-gray-400">
+                        <li>Cisco IOS / pfSense</li><li>Linux Administration</li><li>Docker / Nginx</li><li>VLAN / QoS / VPN</li>
+                    </ul>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-brand-400 text-3xl mb-4"><i class="fa-solid fa-robot"></i></div>
+                    <h4 class="text-white font-bold mb-3">AI / ML</h4>
+                    <ul class="space-y-1.5 text-sm text-gray-400">
+                        <li>LLMs / RAG</li><li>LangChain</li><li>Vector Databases</li><li>Prompt Engineering</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── CONTACT ───────────────────────────── -->
+    <section id="contact" class="py-24 px-6 bg-gray-900/50">
+        <div class="max-w-3xl mx-auto text-center">
+            <span class="text-brand-400 text-sm font-semibold tracking-widest uppercase">Get In Touch</span>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-white mt-3 mb-6">Let's <span class="text-gradient">Build Together</span></h2>
+            <p class="text-gray-500 mb-12 max-w-lg mx-auto">I'm always open to discussing new projects, technical challenges, or opportunities to create meaningful impact.</p>
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <a href="mailto:innocent@operator-desk.dev" class="glass-card rounded-xl px-6 py-4 flex items-center gap-3 text-gray-300 hover:text-brand-400 transition min-w-[160px] justify-center">
+                    <i class="fa-solid fa-envelope text-xl text-brand-400"></i><span class="text-sm">Email</span>
+                </a>
+                <a href="#" class="glass-card rounded-xl px-6 py-4 flex items-center gap-3 text-gray-300 hover:text-brand-400 transition min-w-[160px] justify-center">
+                    <i class="fa-brands fa-linkedin text-xl text-brand-400"></i><span class="text-sm">LinkedIn</span>
+                </a>
+                <a href="#" class="glass-card rounded-xl px-6 py-4 flex items-center gap-3 text-gray-300 hover:text-brand-400 transition min-w-[160px] justify-center">
+                    <i class="fa-brands fa-github text-xl text-brand-400"></i><span class="text-sm">GitHub</span>
+                </a>
+                <a href="#" class="glass-card rounded-xl px-6 py-4 flex items-center gap-3 text-gray-300 hover:text-brand-400 transition min-w-[160px] justify-center">
+                    <i class="fa-solid fa-file-arrow-down text-xl text-brand-400"></i><span class="text-sm">Resume</span>
+                </a>
+            </div>
+            <a href="operator.html" class="inline-flex items-center gap-2 px-8 py-4 bg-purple-500/10 border border-purple-500/30 text-purple-400 rounded-xl hover:bg-purple-500/20 transition font-semibold">
+                <i class="fa-solid fa-terminal"></i> Launch Operator Mode
+            </a>
+        </div>
+    </section>
+
+    <!-- ─── FOOTER ────────────────────────────── -->
+    <footer class="py-8 text-center border-t border-gray-800/50">
+        <p class="text-gray-600 text-sm">&copy; 2025 Innocent Mwea · Built with <i class="fa-solid fa-heart text-red-500 text-xs"></i> using HTML, Tailwind & Zero Over‑engineering</p>
+        <p class="text-gray-700 text-xs mt-1">Ankara, Turkey · innocent@operator-desk.dev</p>
+    </footer>
+
+    <!-- ─── SCRIPTS ───────────────────────────── -->
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.style.backgroundColor = 'rgba(10,10,15,0.9)';
+                nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.3)';
+            } else {
+                nav.style.backgroundColor = '';
+                nav.style.boxShadow = '';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-fade-up, .animate-slide-right').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
